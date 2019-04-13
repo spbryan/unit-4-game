@@ -1,0 +1,17 @@
+/********************************************
+*  Sean Bryan
+*  2019-04-13
+*********************************************/
+
+/* Element Styles */
+body {
+    background-image: url(../images/Hoth.jpeg);
+    background-attachment: fixed;
+    /* background-position: center;  */
+    background-size: cover;
+}
+
+/* Class Styles */
+
+
+/* ID Styles */
