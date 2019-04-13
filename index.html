@@ -6,14 +6,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Star Wars RPG</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
 </head>
 
 <body>
-    <h1>Starting Point</h1>
+    <section class="container">
+        <section class="row text-center mt-1">
+            <div class="col-sm-12">
+                <img src="./assets/images/StarWarsRPG.JPG" class="img-fluid" id="title-image" alt="Title">
+            </div>
+        </section>
+        <section class="row text-left mt-4">
+            <div class="col-sm-12">
+                <h1>Select a Champion</h1>
+            </div>
+        </section>
+        <section class="row mt-4" id="character-list">
+            <div class="col-sm-2 character" id="character-1">
+                <h1>Character 1</h1>
+            </div>
+            <div class="col-sm-2 character" id="character-2">
+                <h1>Character 2</h1>
+            </div>
+            <div class="col-sm-2 character" id="character-3">
+                <h1>Character 3</h1>
+            </div>
+            <div class="col-sm-2 character" id="character-4">
+                <h1>Character 4</h1>
+            </div>
+        </section>
+        <section class="row text-left mt-4">
+            <div class="col-sm-12">
+                <h1>Select an Opponent</h1>
+            </div>
+        </section>
+        <section class="row mt-4" id="enemy-list">
+            <div class="col-sm-2 enemy" id="enemy-1">
+                <h1>Enemy 1</h1>
+            </div>
+            <div class="col-sm-2 enemy" id="enemy-1">
+                <h1>Enemy 2</h1>
+            </div>
+            <div class="col-sm-2 enemy" id="enemy-1">
+                <h1>Enemy 3</h1>
+            </div>
+        </section>
+        <section class="row mt-4" id="arena">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-3" id="hero">
+                <div class="jumbotron light-side">
+                    <h1>Hero</h1>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-danger" id="attack-button">Attack</button>
+                <!-- <img src="./assets/images/versus.JPG" class="img-fluid" id="versus-image" alt="versus"> -->
+            </div>
+            <div class="col-sm-3" id="villain">
+                <div class="jumbotron light-side">
+                    <h1>Villain</h1>
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </section>
+        <section class="row mt-4" id="results">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-8" id="score-board">
+                <div class="scroll-box balance-side">
+                    <h1 id="hero-attack">Hero Attack</h1>
+                    <h1 id="villain-attack">Villain Counter Attack</h1>
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </section>
 
+    </section>
+    <script src="./assets/javascript/game.js"></script>
 </body>
 
 </html>
