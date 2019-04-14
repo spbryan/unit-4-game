@@ -17,6 +17,11 @@ body {
     overflow-y: scroll;
 }
 
+.character img {
+    height: 160px;
+    width: 100%;
+}
+
 /* ID Styles */
 #title-image {
     border-color: #10fefe;
