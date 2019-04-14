@@ -5,6 +5,7 @@
 $(document).ready(function () {
     // Global Variables
     var heroAttack = 0;
+    var heroSelected = false;
 
     var lukeSkywalker = {
         name: "Luke Skywalker",
@@ -47,24 +48,42 @@ $(document).ready(function () {
     console.log("Test");
     initializeGame();
 
+    $(".character").on("click", function () {
+        console.log($(this).attr("id"));
+        if (!heroSelected) {
+            var id = $(this).attr("id");
+            var index = parseInt(id.charAt(id.length - 1));
+            var cardDiv = buildCharacterCard(characterList[index - 1]);
+            cardDiv.appendTo(".light-side");
+            heroSelected = true;
+        }
+
+    })
+
     function initializeGame() {
-        buildCharacterList(characterList);
+        heroSelected = false;
+        buildCharacterList(characterList, "character");
     }
 
-    function buildCharacterList(characters) {
+    function buildCharacterList(characters, className) {
         for (var i = 0; i < characters.length; i++) {
-            var cardDiv = $("<div/>", { class: "card" });
-            var cardImage = $("<img/>", { class: "card-img-top", src: characters[i].image });
-            var cardBody = $("<div/>", { class: "card-body" });
-            var cardTitle = $("<h5/>", { class: "card-title", text: characters[i].name });
-            var cardText = $("<p/>", { class: "card-text", text: "Hit Points: " + characters[i].hitPoints });
-
-            cardBody.append(cardTitle);
-            cardBody.append(cardText);
-            cardDiv.append(cardImage);
-            cardDiv.append(cardBody);
-            cardDiv.appendTo("#character-" + (i + 1));
+            var cardDiv = buildCharacterCard(characters[i]);
+            cardDiv.appendTo("#" + className + "-" + (i + 1));
         }
+    }
+
+    function buildCharacterCard(character) {
+        var cardDiv = $("<div/>", { class: "card" });
+        var cardImage = $("<img/>", { class: "card-img-top", src: character.image });
+        var cardBody = $("<div/>", { class: "card-body" });
+        var cardTitle = $("<h5/>", { class: "card-title", text: character.name });
+        var cardText = $("<p/>", { class: "card-text", text: "Hit Points: " + character.hitPoints });
+
+        cardBody.append(cardTitle);
+        cardBody.append(cardText);
+        cardDiv.append(cardImage);
+        cardDiv.append(cardBody);
+        return cardDiv;
     }
 
     //onclick the character 
