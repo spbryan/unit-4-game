@@ -63,10 +63,9 @@ $(document).ready(function () {
             cardDiv.appendTo(".light-side");
 
             //Put remaining characters on opponent list
-            $("#champion-header").empty();
+            $("#character-header").text("Select an Opponent");
             $("#character-list").empty();
             buildOpponentList();
-            diplayHeader("opponent", "Select an Opponent");
             displayCharacters(opponentList, "opponent");
         }
     })
@@ -78,7 +77,7 @@ $(document).ready(function () {
             opponentIndex = parseInt(id.charAt(id.length - 1)) - 1;
             var cardDiv = buildCharacterCard(opponentList[opponentIndex]);
             cardDiv.appendTo(".dark-side");
-            $("#opponent-header").empty();
+            $("#character-header").empty();
             diplayHeader("arena", "FIGHT!!!!");
         }
     })
