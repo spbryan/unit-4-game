@@ -59,8 +59,7 @@ $(document).ready(function () {
             //Move player to arena
             var id = $(this).attr("id");
             playerIndex = parseInt(id.charAt(id.length - 1)) - 1;
-            var cardDiv = buildCharacterCard(characterList[playerIndex]);
-            cardDiv.appendTo(".light-side");
+            displayChampion();
 
             //Put remaining characters on opponent list
             $("#character-header").text("Select an Opponent");
@@ -75,8 +74,8 @@ $(document).ready(function () {
             //Move opponent to arena
             var id = $(this).attr("id");
             opponentIndex = parseInt(id.charAt(id.length - 1)) - 1;
-            var cardDiv = buildCharacterCard(opponentList[opponentIndex]);
-            cardDiv.appendTo(".dark-side");
+            displayOpponent();
+            displayFightButton();
             $("#character-header").empty();
             diplayHeader("arena", "FIGHT!!!!");
         }
@@ -87,6 +86,37 @@ $(document).ready(function () {
             var cardDiv = buildCharacterCard(characters[i]);
             cardDiv.appendTo("#" + className + "-" + (i + 1));
         }
+    }
+
+    function displayChampion() {
+        var cardDiv = buildCharacterCard(characterList[playerIndex]);
+        var championDiv = $("<div>");
+        championDiv.attr("class", "jumbotron light-side");
+        $("#champion").append(championDiv);
+        var championH2 = $("<h2>");
+        championH2.text("CHAMPION");
+        championH2.appendTo(".light-side");
+        cardDiv.appendTo(".light-side");
+    }
+
+    function displayOpponent() {
+        var cardDiv = buildCharacterCard(opponentList[opponentIndex]);
+        var opponentDiv = $("<div>");
+        opponentDiv.attr("class", "jumbotron dark-side");
+        $("#opponent").append(opponentDiv);
+        var opponentH2 = $("<h2>");
+        opponentH2.text("OPPONENT");
+        opponentH2.appendTo(".dark-side");
+        cardDiv.appendTo(".dark-side");
+    }
+
+    function displayFightButton () {
+        var fightButton = $("<button>");
+        fightButton.attr("type", "button");
+        fightButton.attr("class", "btn btn-danger");
+        fightButton.attr("id", "attack");
+        fightButton.text("ATTACK");
+        $("#fight-button").append(fightButton);
     }
 
     function diplayHeader(appendToId, textValue) {
