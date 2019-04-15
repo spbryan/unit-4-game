@@ -22,6 +22,21 @@ body {
     width: 100%;
 }
 
+.opponent img {
+    height: 160px;
+    width: 100%;
+}
+
+.light-side img {
+    height: 160px;
+    width: 100%;
+}
+
+.dark-side img {
+    height: 160px;
+    width: 100%;
+}
+
 /* ID Styles */
 #title-image {
     border-color: #10fefe;
