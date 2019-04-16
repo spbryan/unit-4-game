@@ -74,12 +74,39 @@ $(document).ready(function () {
             //Move opponent to arena
             var id = $(this).attr("id");
             opponentIndex = parseInt(id.charAt(id.length - 1)) - 1;
-            displayOpponent();
-            displayFightButton();
-            $("#character-header").empty();
-            diplayHeader("arena", "FIGHT!!!!");
+            // debugger;
+            if (!opponentList[opponentIndex].isDefeated) {
+                displayOpponent();
+                displayAttackButton();
+                $("#character-header").empty();
+                diplayHeader("arena", "FIGHT!!!!");
+            }
         }
     })
+
+    $(document).on('click', '#attack-button', function () {
+        var champion = characterList[playerIndex];
+        var opponent = opponentList[opponentIndex];
+        //Hero attacks opponent
+        heroAttack += champion.attackDamage;
+        opponent.hitPoints -= heroAttack;
+        if (opponent.hitPoints <= 0) {
+            opponent.hitPoints = 0;
+            opponentDefeated(opponent);
+            $("#attack").empty();
+        }
+        else {
+            //Opponent Counter-attacks
+            champion.hitPoints -= opponent.attackDamage;
+            if (champion.hitPoints <= 0) {
+                champion.hitPoints = 0;
+                championDefeated(champion);
+            }
+        }
+
+        $("#champion .card-text").text(champion.hitPoints);
+        $("#opponent .card-text").text(opponent.hitPoints);
+    });
 
     function displayCharacters(characters, className) {
         for (var i = 0; i < characters.length; i++) {
@@ -110,13 +137,28 @@ $(document).ready(function () {
         cardDiv.appendTo(".dark-side");
     }
 
-    function displayFightButton () {
-        var fightButton = $("<button>");
-        fightButton.attr("type", "button");
-        fightButton.attr("class", "btn btn-danger");
-        fightButton.attr("id", "attack");
-        fightButton.text("ATTACK");
-        $("#fight-button").append(fightButton);
+    function opponentDefeated(opponent) {
+        opponent.isDefeated = true;
+        $("#character-header").text("Select an Opponent");
+        $(".opponent").empty();
+        displayCharacters(opponentList, "opponent");
+        opponentIndex = -1;
+    }
+
+    function championDefeated(champion) {
+        champion.isDefeated = true;
+        $("#champion").empty();
+        displayChampion();
+        $("#attack").empty();
+    }
+
+    function displayAttackButton() {
+        var attackButton = $("<button>");
+        attackButton.attr("type", "button");
+        attackButton.attr("class", "btn btn-danger");
+        attackButton.attr("id", "attack-button");
+        attackButton.text("ATTACK");
+        $("#attack").append(attackButton);
     }
 
     function diplayHeader(appendToId, textValue) {
