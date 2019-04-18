@@ -62,7 +62,8 @@ $(document).ready(function () {
             displayChampion();
 
             //Put remaining characters on opponent list
-            $("#character-header").text("Select an Opponent");
+            // $("#character-header").text("Select an Opponent");
+            $("#header-value").text("Select an Opponent");
             $("#character-list").empty();
             buildOpponentList();
             // displayAttackButton();
@@ -137,6 +138,7 @@ $(document).ready(function () {
         var cardDiv = buildCharacterCard(characterList[playerIndex]);
         var championDiv = $("<div>");
         championDiv.attr("class", "jumbotron light-side");
+        // championDiv.attr("class", "light-side");
         $("#champion").append(championDiv);
         var championH2 = $("<h2>");
         championH2.text("CHAMPION");
@@ -147,6 +149,7 @@ $(document).ready(function () {
     function displayOpponent() {
         var cardDiv = buildCharacterCard(opponentList[opponentIndex]);
         var opponentDiv = $("<div>");
+        // opponentDiv.attr("class", "jumbotron dark-side");
         opponentDiv.attr("class", "jumbotron dark-side");
         $("#opponent").append(opponentDiv);
         var opponentH2 = $("<h2>");
@@ -157,7 +160,8 @@ $(document).ready(function () {
 
     function opponentDefeated(opponent) {
         opponent.isDefeated = true;
-        $("#character-header").text("Select an Opponent");
+        // $("#character-header").text("Select an Opponent");
+        $("#header-value").text("Select an Opponent");
         $(".opponent").empty();
         $("#arena-header").empty();
         displayCharacters(opponentList, "opponent");
@@ -236,7 +240,7 @@ $(document).ready(function () {
             cardImage = $("<img/>", { class: "card-img-top", src: character.defeatImage });
         }
         var cardBody = $("<div/>", { class: "card-body" });
-        var cardTitle = $("<h5/>", { class: "card-title", text: character.name });
+        var cardTitle = $("<p/>", { class: "card-title", text: character.name });
         var cardText = $("<p/>", { class: "card-text", text: "Hit Points: " + character.hitPoints });
 
         cardBody.append(cardTitle);
