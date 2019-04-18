@@ -4,13 +4,13 @@
  **************************************************/
 $(document).ready(function () {
     // Global Variables
-    var heroAttack = 0;
+    var championAttack = 0;
 
     var lukeSkywalker = {
         name: "Luke Skywalker",
         image: "./assets/images/luke_attack.jpg",
-        hitPoints: 130,
-        attackDamage: 10,
+        hitPoints: 140,
+        attackDamage: 8,
         counterDamage: 20,
         isDefeated: false,
         defeatImage: "./assets/images/luke_defeat.jpg"
@@ -20,8 +20,8 @@ $(document).ready(function () {
         name: "Darth Vader",
         image: "./assets/images/vader_attack.jpg",
         hitPoints: 150,
-        attackDamage: 15,
-        counterDamage: 30,
+        attackDamage: 7,
+        counterDamage: 20,
         isDefeated: false,
         defeatImage: "./assets/images/vader_defeat.jpg"
     };
@@ -29,9 +29,9 @@ $(document).ready(function () {
     var hanSolo = {
         name: "Han Solo",
         image: "./assets/images/solo_attack.jpg",
-        hitPoints: 100,
-        attackDamage: 7,
-        counterDamage: 14,
+        hitPoints: 120,
+        attackDamage: 14,
+        counterDamage: 15,
         isDefeated: false,
         defeatImage: "./assets/images/solo_defeat.jpg"
     };
@@ -40,8 +40,8 @@ $(document).ready(function () {
         name: "Boba Fett",
         image: "./assets/images/boba_attack.jpg",
         hitPoints: 110,
-        attackDamage: 9,
-        counterDamage: 18,
+        attackDamage: 20,
+        counterDamage: 6,
         isDefeated: false,
         defeatImage: "./assets/images/boba_defeat.jpg"
     };
@@ -65,10 +65,13 @@ $(document).ready(function () {
             $("#character-header").text("Select an Opponent");
             $("#character-list").empty();
             buildOpponentList();
+            // displayAttackButton();
+            displayScoreboard();
             displayCharacters(opponentList, "opponent");
         }
     })
 
+    // $("#opponent-list").on("click", ".opponent", function () {
     $(".opponent").on("click", function () {
         if (opponentIndex < 0) {
             //Move opponent to arena
@@ -87,25 +90,40 @@ $(document).ready(function () {
     $(document).on('click', '#attack-button', function () {
         var champion = characterList[playerIndex];
         var opponent = opponentList[opponentIndex];
-        //Hero attacks opponent
-        heroAttack += champion.attackDamage;
-        opponent.hitPoints -= heroAttack;
+        //Champion attacks opponent
+        championAttack += champion.attackDamage;
+        opponent.hitPoints -= championAttack;
         if (opponent.hitPoints <= 0) {
             opponent.hitPoints = 0;
             opponentDefeated(opponent);
             $("#attack").empty();
         }
-        else {
-            //Opponent Counter-attacks
-            champion.hitPoints -= opponent.attackDamage;
-            if (champion.hitPoints <= 0) {
-                champion.hitPoints = 0;
+
+        //Opponent Counter-attacks
+        champion.hitPoints -= opponent.counterDamage;
+        if (champion.hitPoints <= 0) {
+            champion.hitPoints = 0;
+            if (opponent.isDefeated) {
+                champion.hitPoints = 1;
+            }
+            else {
                 championDefeated(champion);
             }
         }
 
         $("#champion .card-text").text(champion.hitPoints);
         $("#opponent .card-text").text(opponent.hitPoints);
+        displayAction(champion, opponent);
+
+        if (champion.isDefeated) {
+            $("#character-header").empty();
+            diplayHeader("arena", "Game Over!  You Lose!");
+        }
+
+        if (allOpponentsDefeated()) {
+            $("#character-header").empty();
+            diplayHeader("arena", "Game Over!  You Win!");
+        }
     });
 
     function displayCharacters(characters, className) {
@@ -141,6 +159,7 @@ $(document).ready(function () {
         opponent.isDefeated = true;
         $("#character-header").text("Select an Opponent");
         $(".opponent").empty();
+        $("#arena-header").empty();
         displayCharacters(opponentList, "opponent");
         opponentIndex = -1;
     }
@@ -148,6 +167,7 @@ $(document).ready(function () {
     function championDefeated(champion) {
         champion.isDefeated = true;
         $("#champion").empty();
+        $("#arena-header").empty();
         displayChampion();
         $("#attack").empty();
     }
@@ -159,6 +179,37 @@ $(document).ready(function () {
         attackButton.attr("id", "attack-button");
         attackButton.text("ATTACK");
         $("#attack").append(attackButton);
+    }
+
+    function displayScoreboard() {
+        var scrollBox = $("<div>");
+        scrollBox.attr("class", "scroll-box neutral-side");
+        $("#score-board").append(scrollBox);
+    }
+
+    function displayAction(champion, opponent) {
+        var championAction =
+            champion.name + " hits " +
+            opponent.name + " for " +
+            championAttack + " points";
+
+        var opponentAction =
+            opponent.name + " counters, hitting " +
+            champion.name + " for " +
+            opponent.counterDamage + " points";
+
+        var newBr = $("<br>")
+        $(".scroll-box").prepend(newBr);
+
+        var opponentP = $("<p>");
+        opponentP.attr("id", "opponent-attack");
+        opponentP.text(opponentAction);
+        $(".scroll-box").prepend(opponentP);
+
+        var championP = $("<p>");
+        championP.attr("id", "champion-attack");
+        championP.text(championAction);
+        $(".scroll-box").prepend(championP);
     }
 
     function diplayHeader(appendToId, textValue) {
@@ -201,9 +252,13 @@ $(document).ready(function () {
         displayCharacters(characterList, "character");
     }
 
-    //onclick the character 
-    //  1. move hero to the arena
-    //  2. Change heading to indicate an oponent list
-    //  3. Change border of oponenets to red
+    function allOpponentsDefeated() {
+        for (var i = 0; i < opponentList.length; i++) {
+            if (opponentList[i].isDefeated === false) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 });
