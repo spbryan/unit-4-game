@@ -79,11 +79,15 @@ $(document).ready(function () {
             var id = $(this).attr("id");
             opponentIndex = parseInt(id.charAt(id.length - 1)) - 1;
             // debugger;
+            // if (!opponentList[opponentIndex].isDefeated) {
+            displayOpponent();
+            displayAttackButton();
+            $("#character-header").empty();
             if (!opponentList[opponentIndex].isDefeated) {
-                displayOpponent();
-                displayAttackButton();
-                $("#character-header").empty();
                 diplayHeader("arena", "FIGHT!!!!");
+            }
+            else {
+                diplayHeader("arena", "YOU ALREADY BEAT THIS GUY.  GIVE 'EM A SMACK AND THEN SELECT SOMEONE WITH SOME FIGHT!");
             }
         }
     })
@@ -92,7 +96,10 @@ $(document).ready(function () {
         var champion = characterList[playerIndex];
         var opponent = opponentList[opponentIndex];
         //Champion attacks opponent
-        championAttack += champion.attackDamage;
+        if (!opponent.isDefeated) {
+            championAttack += champion.attackDamage;
+        }
+        
         opponent.hitPoints -= championAttack;
         if (opponent.hitPoints <= 0) {
             opponent.hitPoints = 0;
@@ -101,13 +108,10 @@ $(document).ready(function () {
         }
 
         //Opponent Counter-attacks
-        champion.hitPoints -= opponent.counterDamage;
-        if (champion.hitPoints <= 0) {
-            champion.hitPoints = 0;
-            if (opponent.isDefeated) {
-                champion.hitPoints = 1;
-            }
-            else {
+        if (!opponent.isDefeated) {
+            champion.hitPoints -= opponent.counterDamage;
+            if (champion.hitPoints <= 0) {
+                champion.hitPoints = 0;
                 championDefeated(champion);
             }
         }
