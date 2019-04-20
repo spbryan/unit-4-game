@@ -7,7 +7,6 @@
 body {
     background-image: url(../images/Hoth.jpeg);
     background-attachment: fixed;
-    /* background-position: center;  */
     background-size: cover;
 }
 
@@ -30,16 +29,29 @@ h1 {
     border-width: 5px 5px;
 }
 
+/* Bootstrap Override */
+.btn-danger {
+    color: #dcdce5;
+    background-color: #f80328;
+    border-color: #f80328;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card-body {
+    /* background-color: darkgray; */
+    background-color: black;
+}
+
 .card {
-    /* border-color:  #10fefe; */
-    border-color:  #f80328;
+    border-color:  #d64602;;
+    /* border-color:  #f80328; */
     border-style: solid;
     border-width: 5px 5px;
 }
 
-.card-title {
-    color: blue;
-    font-weight: bold;
+.card-title,
+.card-text {
+    color: #f4e51a;
 }
 
 .character img {
@@ -52,15 +64,18 @@ h1 {
     width: 100%;
 }
 
-.light-side {
+.light-side,
+.dark-side {
     background-image: url(../images/stars2.jpg);
-    /* height: 300px; */
-    color: #f80328;
     font-size: 1.2em;
-    border-color: #dcdce5;
     border-style: solid;
     border-width: 5px 5px;
     border-radius: 25px;
+}
+
+.light-side {
+    color: #10fefe;
+    border-color: #10fefe;
 }
 
 .light-side img {
@@ -68,20 +83,22 @@ h1 {
     width: 100%;
 }
 
+.light-side h2 {
+    margin-bottom: 6px;
+}
+
 .dark-side {
-    background-image: url(../images/stars2.jpg);
-    /* height: 300px; */
     color: red;
-    font-size: 1.2em;
-    border-color: #dcdce5;
-    border-style: solid;
-    border-width: 5px 5px;
-    border-radius: 25px;
+    border-color: #f80328;
 }
 
 .dark-side img {
     height: 160px;
     width: 100%;
+}
+
+.dark-side h2 {
+    margin-bottom: 6px;
 }
 
 /* ID Styles */
@@ -114,10 +131,13 @@ h1 {
     /* color: darkblue; */
 }
 
-#arena-header h1 {
+#arena-header {
+    text-align: center;
+}
+
+#arena-header h2 {
     background-color: black;
     color:  #f4e51a;
-    text-align: center;
     padding: 5px 10px;
     border-color:  #f4e51a;
     border-style: solid;

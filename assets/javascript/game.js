@@ -50,10 +50,14 @@ $(document).ready(function () {
     var opponentList = [];
     var playerIndex = -1;
     var opponentIndex = -1;
+    var gameOver = false;
 
     console.log("Test");
     initializeGame();
 
+    /**
+     * On-Click function to select champion
+     */
     $(".character").on("click", function () {
         if (playerIndex < 0) {
             //Move player to arena
@@ -62,57 +66,64 @@ $(document).ready(function () {
             displayChampion();
 
             //Put remaining characters on opponent list
-            // $("#character-header").text("Select an Opponent");
             $("#header-value").text("Select an Opponent");
             $("#character-list").empty();
             buildOpponentList();
-            // displayAttackButton();
             displayScoreboard();
             displayCharacters(opponentList, "opponent");
         }
     })
 
-    // $("#opponent-list").on("click", ".opponent", function () {
+    /**
+     * On-Click funtion to select opponent
+     */
     $(".opponent").on("click", function () {
         if (opponentIndex < 0) {
-            //Move opponent to arena
-            var id = $(this).attr("id");
-            opponentIndex = parseInt(id.charAt(id.length - 1)) - 1;
-            // debugger;
-            // if (!opponentList[opponentIndex].isDefeated) {
-            displayOpponent();
-            displayAttackButton();
-            $("#character-header").empty();
-            if (!opponentList[opponentIndex].isDefeated) {
-                diplayHeader("arena", "FIGHT!!!!");
-            }
-            else {
-                diplayHeader("arena", "YOU ALREADY BEAT THIS GUY.  GIVE 'EM A SMACK AND THEN SELECT SOMEONE WITH SOME FIGHT!");
+            if (!gameOver) {
+                //Move opponent to arena
+                var id = $(this).attr("id");
+                opponentIndex = parseInt(id.charAt(id.length - 1)) - 1;
+                displayOpponent();
+                displayAttackButton();
+                $("#header-value").empty();
+                if (opponentList[opponentIndex].isDefeated) {
+                    diplayHeader2("arena", "YOU ALREADY BEAT THIS OPPONENT.  GIVE 'EM A SMACK AND THEN SELECT SOMEONE WITH SOME FIGHT!");
+                }
             }
         }
     })
 
+    /**
+     * Onclick funtion for Attack button.  Controls the main battle logic
+     */
     $(document).on('click', '#attack-button', function () {
+        var opponentDefeatedThisRound = false;
         var champion = characterList[playerIndex];
         var opponent = opponentList[opponentIndex];
         //Champion attacks opponent
         if (!opponent.isDefeated) {
             championAttack += champion.attackDamage;
         }
-        
+
         opponent.hitPoints -= championAttack;
         if (opponent.hitPoints <= 0) {
             opponent.hitPoints = 0;
+            opponentDefeatedThisRound = true;
             opponentDefeated(opponent);
             $("#attack").empty();
         }
 
         //Opponent Counter-attacks
-        if (!opponent.isDefeated) {
+        if (!opponent.isDefeated || opponentDefeatedThisRound) {
             champion.hitPoints -= opponent.counterDamage;
             if (champion.hitPoints <= 0) {
-                champion.hitPoints = 0;
-                championDefeated(champion);
+                if (opponentDefeatedThisRound) {
+                    champion.hitPoints = 0; //tie-breaker goes to champion
+                }
+                else {
+                    champion.hitPoints = 0;
+                    championDefeated(champion);
+                }
             }
         }
 
@@ -121,11 +132,13 @@ $(document).ready(function () {
         displayAction(champion, opponent);
 
         if (champion.isDefeated) {
+            gameOver = true;
             $("#character-header").empty();
             diplayHeader("arena", "Game Over!  You Lose!");
         }
 
         if (allOpponentsDefeated()) {
+            gameOver = true;
             $("#character-header").empty();
             diplayHeader("arena", "Game Over!  You Win!");
         }
@@ -164,11 +177,11 @@ $(document).ready(function () {
 
     function opponentDefeated(opponent) {
         opponent.isDefeated = true;
-        // $("#character-header").text("Select an Opponent");
-        $("#header-value").text("Select an Opponent");
         $(".opponent").empty();
         $("#arena-header").empty();
         displayCharacters(opponentList, "opponent");
+        debugger;
+        $("#header-value").text("Select an Opponent");
         opponentIndex = -1;
     }
 
@@ -224,6 +237,12 @@ $(document).ready(function () {
         var newH1 = $("<h1>");
         newH1.text(textValue);
         $("#" + appendToId + "-header").append(newH1);
+    }
+
+    function diplayHeader2(appendToId, textValue) {
+        var newH2 = $("<h2>");
+        newH2.text(textValue);
+        $("#" + appendToId + "-header").append(newH2);
     }
 
     function buildOpponentList() {
