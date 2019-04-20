@@ -97,6 +97,7 @@ $(document).ready(function () {
      * Onclick funtion for Attack button.  Controls the main battle logic
      */
     $(document).on('click', '#attack-button', function () {
+        debugger;
         var opponentDefeatedThisRound = false;
         var champion = characterList[playerIndex];
         var opponent = opponentList[opponentIndex];
@@ -105,10 +106,15 @@ $(document).ready(function () {
             championAttack += champion.attackDamage;
         }
 
-        opponent.hitPoints -= championAttack;
+        if (opponent.hitPoints > 0) {
+            opponent.hitPoints -= championAttack;
+        }
+
         if (opponent.hitPoints <= 0) {
+            if (opponent.hitPoints < 0) {
+                opponentDefeatedThisRound = true;
+            }
             opponent.hitPoints = 0;
-            opponentDefeatedThisRound = true;
             opponentDefeated(opponent);
             $("#attack").empty();
         }
@@ -144,6 +150,12 @@ $(document).ready(function () {
         }
     });
 
+    /**
+     * Display the characters.  Append to passed class name 
+     * based on position in array
+     * @param characters 
+     * @param className 
+     */
     function displayCharacters(characters, className) {
         for (var i = 0; i < characters.length; i++) {
             var cardDiv = buildCharacterCard(characters[i]);
@@ -151,11 +163,13 @@ $(document).ready(function () {
         }
     }
 
+    /**
+     * Display the champion in the arena
+     */
     function displayChampion() {
         var cardDiv = buildCharacterCard(characterList[playerIndex]);
         var championDiv = $("<div>");
         championDiv.attr("class", "jumbotron light-side");
-        // championDiv.attr("class", "light-side");
         $("#champion").append(championDiv);
         var championH2 = $("<h2>");
         championH2.text("CHAMPION");
@@ -163,10 +177,12 @@ $(document).ready(function () {
         cardDiv.appendTo(".light-side");
     }
 
+    /**
+     * Display the opponent in the arena
+     */
     function displayOpponent() {
         var cardDiv = buildCharacterCard(opponentList[opponentIndex]);
         var opponentDiv = $("<div>");
-        // opponentDiv.attr("class", "jumbotron dark-side");
         opponentDiv.attr("class", "jumbotron dark-side");
         $("#opponent").append(opponentDiv);
         var opponentH2 = $("<h2>");
@@ -175,16 +191,24 @@ $(document).ready(function () {
         cardDiv.appendTo(".dark-side");
     }
 
+    /**
+     * Update character to indicate they are a defeated opponent.
+     * Ends round of fighting and resets selection
+     * @param opponent 
+     */
     function opponentDefeated(opponent) {
         opponent.isDefeated = true;
         $(".opponent").empty();
         $("#arena-header").empty();
         displayCharacters(opponentList, "opponent");
-        debugger;
         $("#header-value").text("Select an Opponent");
         opponentIndex = -1;
     }
 
+    /**
+     * Update character to indicate a defeated champion.
+     * @param champion 
+     */
     function championDefeated(champion) {
         champion.isDefeated = true;
         $("#champion").empty();
@@ -193,6 +217,9 @@ $(document).ready(function () {
         $("#attack").empty();
     }
 
+    /**
+     * Create and display the attack button
+     */
     function displayAttackButton() {
         var attackButton = $("<button>");
         attackButton.attr("type", "button");
@@ -202,12 +229,20 @@ $(document).ready(function () {
         $("#attack").append(attackButton);
     }
 
+    /**
+     * Create and display the scoreboard that will record the battle action
+     */
     function displayScoreboard() {
         var scrollBox = $("<div>");
         scrollBox.attr("class", "scroll-box neutral-side");
         $("#score-board").append(scrollBox);
     }
 
+    /**
+     * Update the scoreboard with the details of the battle action for the round
+     * @param champion 
+     * @param opponent 
+     */
     function displayAction(champion, opponent) {
         var championAction =
             champion.name + " hits " +
@@ -233,18 +268,31 @@ $(document).ready(function () {
         $(".scroll-box").prepend(championP);
     }
 
+    /**
+     * Create and populate an h1 element to be appended to a passed id value
+     * @param appendToId 
+     * @param textValue 
+     */
     function diplayHeader(appendToId, textValue) {
         var newH1 = $("<h1>");
         newH1.text(textValue);
         $("#" + appendToId + "-header").append(newH1);
     }
 
+    /**
+     * Create and populate an h2 element to be appended to a passed id value
+     * @param appendToId 
+     * @param textValue 
+     */
     function diplayHeader2(appendToId, textValue) {
         var newH2 = $("<h2>");
         newH2.text(textValue);
         $("#" + appendToId + "-header").append(newH2);
     }
 
+    /**
+     * Create the list of opponents from the remaining characters
+     */
     function buildOpponentList() {
         for (var i = 0; i < characterList.length; i++) {
             if (i !== playerIndex) {
@@ -253,6 +301,10 @@ $(document).ready(function () {
         }
     }
 
+    /**
+     * Create and append the character card element
+     * @param character 
+     */
     function buildCharacterCard(character) {
         var cardDiv = $("<div/>", { class: "card" });
         var cardImage = "";
@@ -273,12 +325,18 @@ $(document).ready(function () {
         return cardDiv;
     }
 
+    /**
+     * Initialize the game
+     */
     function initializeGame() {
         opponentList = [];
         characterList = [lukeSkywalker, hanSolo, bobaFett, darthVader];
         displayCharacters(characterList, "character");
     }
 
+    /**
+     * Check to determin if all opponents on the opponent list are defeated
+     */
     function allOpponentsDefeated() {
         for (var i = 0; i < opponentList.length; i++) {
             if (opponentList[i].isDefeated === false) {
